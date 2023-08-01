@@ -57,5 +57,6 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
+        """deletes objects"""
         if obj is not None:
             del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
