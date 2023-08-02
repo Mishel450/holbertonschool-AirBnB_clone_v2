@@ -124,23 +124,24 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         keys_and_values = args_splited[1:]
-        name_class = HBNBCommand.classes.get(args_splited[0])()
+        name_class = HBNBCommand.classes[args_splited[0]]()
         for i in keys_and_values:
             k_v = i.split('=')
             key = k_v[0]
             value = k_v[1]
             if value[0] == '"' and value[-1] == '"':
                 value = value[1:-1].replace('_', ' ')
-                setattr(name_class, key, value)
+                name_class.__dict__[key] = value
             try:
                 if '.' in value:
                     value = float(value)
-                    setattr(name_class, key, value)
+                    name_class.__dict__[key] = value
                 else:
                     value = int(value)
-                    setattr(name_class, key, value)
+                    name_class.__dict__[key] = value
             except ValueError:
                 pass
+        storage.new(name_class)
         storage.save()
         print(name_class.id)
         storage.save()
