@@ -4,6 +4,12 @@ import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from models.base_model import Base, BaseModel
+from models.city import City
+from models.state import State
+from models.user import User
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 import os
 
 
@@ -12,8 +18,6 @@ class DBStorage:
 
     __engine = None
     __session = None
-
-    
 
     def __init__(self):
         user = os.environ['HBNB_MYSQL_USER']
@@ -25,15 +29,22 @@ class DBStorage:
                            .format(user, password, host, database), pool_pre_ping=True)
         Base.metadata.create_all(self.__engine)
 
-        Session = sessionmaker(self.__engine)
-        self.__session = Session()
-
         if env == "test":
             Base.metadata.drop_all(self.__engine)
     
     def all(self, cls=None):
         """query on the current database session """
-        pass
+        the_dict = {}
+        
+        if cls is None:
+            query = self.__session.query(
+                User, State, City, Amenity, Place, Review).all()
+        else:
+            query = self.__session.query(cls).all()
+        for i in query:
+            the_dict[i.__class__.__name__ + '.' + i.id] = i
+        return the_dict
+
 
     def new(self, obj):
         """add the object to the current database session """
