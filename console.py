@@ -131,14 +131,14 @@ class HBNBCommand(cmd.Cmd):
             value = k_v[1]
             if value[0] == '"' and value[-1] == '"':
                 value = value[1:-1].replace('_', ' ')
-                name_class.__dict__[key] = value
+                setattr(name_class, key, value)
             try:
                 if '.' in value:
                     value = float(value)
-                    name_class.__dict__[key] = value
+                    setattr(name_class, key, value)
                 else:
                     value = int(value)
-                    name_class.__dict__[key] = value
+                    setattr(name_class, key, value)
             except ValueError:
                 pass
         storage.save()
