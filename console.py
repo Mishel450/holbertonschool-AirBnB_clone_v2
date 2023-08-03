@@ -130,7 +130,7 @@ class HBNBCommand(cmd.Cmd):
             key = k_v[0]
             value = k_v[1]
             if value[0] == '"' and value[-1] == '"':
-                value = value[1:-1].replace('_', ' ')
+                value = value[1:-1].replace('_', ' ').strip('\"')
                 setattr(name_class, key, value)
             try:
                 if '.' in value:
