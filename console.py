@@ -141,7 +141,7 @@ class HBNBCommand(cmd.Cmd):
                     name_class.__dict__[key] = value
             except ValueError:
                 pass
-        storage.save(name_class)
+        storage.save()
         print(name_class.id)
         storage.save()
 

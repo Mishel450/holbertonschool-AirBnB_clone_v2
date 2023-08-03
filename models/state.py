@@ -4,6 +4,7 @@ from models.base_model import BaseModel
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from models import storage
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 

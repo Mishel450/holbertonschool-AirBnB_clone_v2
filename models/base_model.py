@@ -15,6 +15,7 @@ class BaseModel:
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     
     def __init__(self, *args, **kwargs):
+        from models import storage
         """Instatntiates a new model"""
         if not kwargs:
             self.id = str(uuid.uuid4())
@@ -32,6 +33,7 @@ class BaseModel:
                 self.created_at = datetime.now()
                 self.updated_at = datetime.now()
             self.__dict__.update(kwargs)
+        self.save()
 
     def __str__(self):
         """Returns a string representation of the instance"""

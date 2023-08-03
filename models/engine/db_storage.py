@@ -4,6 +4,7 @@ import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from models.base_model import Base
+from sqlalchemy.orm import relationship
 
 from os import getenv
 
