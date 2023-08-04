@@ -115,6 +115,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+        flag = 0
         if not args:
             print("** class name missing **")
             return
@@ -122,7 +123,6 @@ class HBNBCommand(cmd.Cmd):
         if args_splited[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        kwargs = {}
         keys_and_values = args_splited[1:]
         name_class = HBNBCommand.classes[args_splited[0]]()
         for i in keys_and_values:
@@ -135,18 +135,16 @@ class HBNBCommand(cmd.Cmd):
             try:
                 if '.' in value:
                     value = float(value)
+                    setattr(name_class, key, value)
                 else:
                     value = int(value)
-                kwargs[key] = value
+                    setattr(name_class, key, value)
             except ValueError:
                 pass
-        new_instance = HBNBCommand.classes[args.split()[0]]()
-        new_instance.dict.update(kwargs)
-        storage.new(new_instance)
         storage.save()
         print(name_class.id)
         storage.save()
-        
+
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
@@ -285,7 +283,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         # first determine if kwargs or args
-        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
+        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) == dict:
             kwargs = eval(args[2])
             args = []  # reformat kwargs into list, ex: [<name>, <value>, ...]
             for k, v in kwargs.items():
@@ -293,7 +291,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] == '\"':  # check for quoted arg
+            if args and args[0] is '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
