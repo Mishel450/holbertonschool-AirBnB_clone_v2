@@ -115,34 +115,33 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        flag = 0
         if not args:
             print("** class name missing **")
             return
-        args_splited = args.split(" ")
-        if args_splited[0] not in HBNBCommand.classes:
-            print("** class doesn't exist **")
+        elif args.split()[0] not in HBNBCommand.classes:
+            print(" class doesn't exist ")
             return
-        keys_and_values = args_splited[1:]
-        name_class = HBNBCommand.classes[args_splited[0]]()
-        for i in keys_and_values:
-            k_v = i.split('=')
-            key = k_v[0]
-            value = k_v[1]
-            if value[0] == '"' and value[-1] == '"':
-                value = value[1:-1].replace('_', ' ').strip('\"')
-                setattr(name_class, key, value)
-            try:
-                if '.' in value:
-                    value = float(value)
-                    setattr(name_class, key, value)
-                else:
-                    value = int(value)
-                    setattr(name_class, key, value)
-            except ValueError:
-                pass
+        else:
+            kwargs = {}
+            for arg in args.split():
+                if "=" in arg:
+                    key, value = arg.split("=")
+                    if value[0] == '"' and value[-1] == '"':
+                        value = value[1:-1].replace("_", " ") \
+                            .replace('\"', '"')
+                    elif "." in value:
+                        value = float(value)
+                    else:
+                        try:
+                            value = int(value)
+                        except Exception as e:
+                            continue
+                    kwargs[key] = value
+        new_instance = HBNBCommand.classes[args.split()[0]]()
+        new_instance.dict.update(kwargs)
+        storage.new(new_instance)
         storage.save()
-        print(name_class.id)
+        print(new_instance.id)
         storage.save()
 
     def help_create(self):
