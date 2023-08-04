@@ -15,3 +15,11 @@ class City(BaseModel, Base):
     state_id = Column(String(60), ForeignKey('states.id') ,nullable=False)
     
     places = relationship('Place', backref='City', cascade='all, delete-orphan')
+
+    def reviews(self):
+        from models import storage
+        result = []
+        for review in storage.all(Review).values():
+            if review.place_id == self.id:
+                result.append(review)
+        return result
