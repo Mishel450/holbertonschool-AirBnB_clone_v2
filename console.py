@@ -141,7 +141,7 @@ class HBNBCommand(cmd.Cmd):
                     setattr(name_class, key, value)
             except ValueError:
                 pass
-        storage.save()
+        name_class.save()
         print(name_class.id)
         storage.save()
 
