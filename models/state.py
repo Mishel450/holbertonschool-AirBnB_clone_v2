@@ -1,20 +1,18 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
 from models import storage
 from sqlalchemy.orm import relationship
-
-Base = declarative_base()
 
 
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-   
-    cities = relationship('City', backref='state', cascade='all, delete-orphan')
+
+    cities = relationship('City', backref='state',
+                          cascade='all, delete-orphan')
 
     def cities(self):
         from models import storage
