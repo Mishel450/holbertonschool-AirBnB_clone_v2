@@ -63,6 +63,7 @@ class DBStorage:
     def reload(self):
         """"""
         Base.metadata.create_all(self.__engine)
-        self.__session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
-
+        the_session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
+        Session = scoped_session(the_session)
+        self.__session = Session()
     cities = relationship('City', backref='state', cascade='all, delete-orphan')
