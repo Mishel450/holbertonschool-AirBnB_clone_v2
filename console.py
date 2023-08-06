@@ -124,13 +124,13 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         keys_and_values = args_splited[1:]
-        name_class = HBNBCommand.classes[args_splited[0]]()
+        name_class = HBNBCommand.classes.get(args_splited[0])()
         for i in keys_and_values:
             k_v = i.split('=')
             key = k_v[0]
             value = k_v[1]
             if value[0] == '"' and value[-1] == '"':
-                value = value[1:-1].replace('_', ' ').strip('\"')
+                value = value[1:-1].replace('_', ' ')
                 setattr(name_class, key, value)
             try:
                 if '.' in value:
@@ -141,7 +141,7 @@ class HBNBCommand(cmd.Cmd):
                     setattr(name_class, key, value)
             except ValueError:
                 pass
-        name_class.save()
+        storage.save()
         print(name_class.id)
         storage.save()
 
@@ -283,7 +283,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         # first determine if kwargs or args
-        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) == dict:
+        if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
             kwargs = eval(args[2])
             args = []  # reformat kwargs into list, ex: [<name>, <value>, ...]
             for k, v in kwargs.items():
