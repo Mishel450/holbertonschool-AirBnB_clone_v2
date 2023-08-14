@@ -20,6 +20,7 @@ def hbnb():
 @app.route('/c/<text>', strict_slashes=False)
 def show_text(text):
     """returns HBNB"""
+    text = text.replace("_", " ")
     return f"C {text}"
 
 if __name__ == '__main__':
