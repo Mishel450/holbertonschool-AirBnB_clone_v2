@@ -115,7 +115,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        flag = 0
         if not args:
             print("** class name missing **")
             return
@@ -130,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
             key = k_v[0]
             value = k_v[1]
             if value[0] == '"' and value[-1] == '"':
-                value = value[1:-1].replace('_', ' ').strip('\"')
+                value = value[1:-1].replace('_', ' ')
                 setattr(name_class, key, value)
             try:
                 if '.' in value:
