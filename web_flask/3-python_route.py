@@ -25,7 +25,7 @@ def show_text(text):
 
 
 @app.route('/python/<text>', strict_slashes=False)
-def show_text(text):
+def show_text(text="is cool"):
     """returns Python and the text"""
     text = text.replace("_", " ")
     return f"Python {text}"
