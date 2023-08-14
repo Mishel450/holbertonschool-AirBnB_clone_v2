@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""task-2"""
+"""task-3"""
 from flask import Flask
 
 app = Flask(__name__)
@@ -19,14 +19,14 @@ def hbnb():
 
 @app.route('/c/<text>', strict_slashes=False)
 def show_text(text):
-    """returns HBNB"""
+    """returns C and the text"""
     text = text.replace("_", " ")
     return f"C {text}"
 
 
 @app.route('/python/<text>', strict_slashes=False)
 def show_text(text):
-    """returns HBNB"""
+    """returns Python and the text"""
     text = text.replace("_", " ")
     return f"Python {text}"
 
