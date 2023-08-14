@@ -118,30 +118,36 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        args_splited = args.split(" ")
-        if args_splited[0] not in HBNBCommand.classes:
+        elif args.split()[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        keys_and_values = args_splited[1:]
-        name_class = HBNBCommand.classes.get(args_splited[0])()
-        for i in keys_and_values:
-            k_v = i.split('=')
-            key = k_v[0]
-            value = k_v[1]
-            if value[0] == '"' and value[-1] == '"':
-                value = value[1:-1].replace('_', ' ')
-                setattr(name_class, key, value)
+
+        def isFloat(num):
             try:
-                if '.' in value:
-                    value = float(value)
-                    setattr(name_class, key, value)
-                else:
-                    value = int(value)
-                    setattr(name_class, key, value)
-            except ValueError:
-                pass
-        storage.save()
-        print(name_class.id)
+                float(num)
+                return True
+            except Exception:
+                return False
+
+        arg = args.split()
+        obj = HBNBCommand.classes[arg[0]]()
+
+        for i in range(1, len(arg)):
+            params = arg[i].split("=")
+            if "id" in params[0]:
+                params[1] = params[1].replace('_', ' ')
+                params[1] = params[1].strip('\"')
+            elif params[1].isdigit() and "." not in params[1]:
+                params[1] = int(params[1])
+            elif isFloat(params[1]):
+                params[1] = float(params[1])
+            else:
+                params[1] = params[1].replace('_', ' ')
+                params[1] = params[1].strip('\"')
+            setattr(obj, params[0], params[1])
+
+        obj.save()
+        print(obj.id)
         storage.save()
 
     def help_create(self):
@@ -224,7 +230,7 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all(HBNBCommand.classes[args]).items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:

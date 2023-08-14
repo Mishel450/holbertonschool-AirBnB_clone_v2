@@ -11,17 +11,24 @@ class FileStorage:
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if cls:
-            cls_dict = {}
-            for key, value in FileStorage.__objects.items():
-                if type(value) == cls:
-                    cls_dict[key] = value
-            return cls_dict
+            new_dict = {}
+            for k, v in FileStorage.__objects.items():
+                if k.split('.')[0] == cls.__name__:
+                    new_dict[k] = v
+            return new_dict
         else:
             return FileStorage.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
         self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
+
+    def delete(self, obj=None):
+        """Deletes an object from the dictionary"""
+        if obj:
+            key = obj.__class__.__name__ + "." + obj.id
+            del FileStorage.__objects[key]
+            self.save()
 
     def save(self):
         """Saves storage dictionary to file"""
@@ -43,10 +50,10 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                  }
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+        }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
@@ -55,8 +62,3 @@ class FileStorage:
                     self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
-
-    def delete(self, obj=None):
-        """deletes objects"""
-        if obj is not None:
-            del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
