@@ -123,7 +123,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         keys_and_values = args_splited[1:]
-        name_class = HBNBCommand.classes[args_splited[0]]()
+        name_class = HBNBCommand.classes.get(args_splited[0])()
         for i in keys_and_values:
             k_v = i.split('=')
             key = k_v[0]
@@ -337,6 +337,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
