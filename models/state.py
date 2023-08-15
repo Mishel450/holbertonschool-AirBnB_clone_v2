@@ -16,12 +16,11 @@ class State(BaseModel, Base):
     else:
         @property
         def cities(self):
+            """Getter for FileStorage """
+            from models.city import City    # import here to avoid circular import
             from models import storage
-            cities = []
-            for key, value in storage.__objects.items():
-                splited_key = key.split('.')
-                if splited_key[0] == 'City':
-                    cities.append(value)
-            filtered_cities = list(
-                filter(lambda x: x.state_id == self.id), cities)
-            return filtered_cities
+            cities_list = []
+            for city in storage.all(City).values():
+                if city.state_id == self.id:
+                    cities_list.append(city)
+            return cities_list
