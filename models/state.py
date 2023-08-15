@@ -17,7 +17,7 @@ class State(BaseModel, Base):
         @property
         def cities(self):
             """Getter for FileStorage """
-            from models.city import City    # import here to avoid circular import
+            from models.city import City
             from models import storage
             cities_list = []
             for city in storage.all(City).values():
