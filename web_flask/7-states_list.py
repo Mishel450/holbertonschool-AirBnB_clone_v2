@@ -15,7 +15,7 @@ def close_db():
 @app.route('/states_list', strict_slashes=False)
 def st_lists():
     from models.state import State
-    st_list = [] = storage.all(State).values()
+    st_list = storage.all(State).values()
     return render_template('7.states_list.html', lista=st_list)
 
 if __name__ == '__main__':
