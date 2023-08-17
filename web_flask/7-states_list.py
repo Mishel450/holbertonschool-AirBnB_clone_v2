@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def close_db():
+def close_db(e):
     storage.close()
 
 
