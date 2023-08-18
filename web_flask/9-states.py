@@ -18,6 +18,7 @@ def st_lists():
     st_list = storage.all(State)
     return render_template('7-states_list.html', lista=st_list)
 
+
 @app.route('/states/<id>', strict_slashes=False)
 def st_lists_and_id(id):
     from models.state import State
@@ -28,6 +29,7 @@ def st_lists_and_id(id):
             the_id = id
             break
     return render_template('9-states.html', lista=i, id=the_id)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
